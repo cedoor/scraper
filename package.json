@@ -1,0 +1,69 @@
+{
+	"name": "scraper",
+	"version": "0.1.0",
+	"description": "Simple desktop scraper app.",
+	"main": "index.js",
+	"scripts": {
+		"start": "electron . --dev",
+		"pack": "electron-builder --dir",
+		"release": "electron-builder"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/cedoor/scraper.git"
+	},
+	"keywords": [
+		"scraping"
+	],
+	"author": "Omar Desogus <omardesogus9@gmail.com> (https://cedoor.github.io)",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/cedoor/scraper/issues"
+	},
+	"homepage": "https://github.com/cedoor/scraper#readme",
+	"dependencies": {
+		"x-ray": "2.3.2",
+		"electron-log": "2.2.14",
+		"electron-updater": "2.21.10"
+	},
+	"devDependencies": {
+		"electron": "2.0.0",
+		"electron-builder": "20.13.3",
+		"electron-reload": "1.2.2",
+		"standard": "11.0.1"
+	},
+	"build": {
+		"productName": "Scraper",
+		"appId": "com.cedoor.scraper",
+		"artifactName": "${productName}-${version}.${ext}",
+		"directories": {
+			"output": "builds",
+			"buildResources": "resources"
+		},
+		"files": [
+			"package.json",
+			"resources",
+			"lib",
+			"src",
+			"index.js"
+		],
+		"publish": {
+			"provider": "github",
+			"owner": "cedoor",
+			"repo": "scraper"
+		},
+		"nsis": {
+			"oneClick": false,
+			"allowToChangeInstallationDirectory": true,
+			"createDesktopShortcut": true
+		},
+		"linux": {
+			"category": "Utility",
+			"target": [
+				"deb",
+				"tar.gz",
+				"AppImage"
+			]
+		}
+	}
+}

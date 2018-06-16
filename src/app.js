@@ -6,7 +6,8 @@ const dom = {
   selector: window.document.querySelector('#selector'),
   result: window.document.querySelector('#result'),
   spinner: window.document.querySelector('#spinner'),
-  button: window.document.querySelector('#button')
+  button: window.document.querySelector('#button'),
+  upload: window.document.querySelector('#upload')
 }
 
 const getValue = () => {

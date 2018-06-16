@@ -1,6 +1,9 @@
 # IDE
-.idea
+.idea/
 
 # npm
 node_modules/
 package-lock.json
+
+# Builds
+builds/

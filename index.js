@@ -1,8 +1,6 @@
 const electron = require('electron')
 const {app, BrowserWindow} = electron
 const path = require('path')
-const {autoUpdater} = require('electron-updater')
-const log = require('electron-log')
 
 const args = process.argv.slice(1)
 const dev = args.some(val => val === '--dev')
@@ -11,14 +9,11 @@ if (dev) {
   require('electron-reload')(__dirname, {})
 }
 
-autoUpdater.logger = log
-autoUpdater.logger.transports.file.level = 'info'
+app.on('ready', () => {
+  console.log(path.join('file://', __dirname, '/resources/icons/128x128.png'))
 
-function createMainWindow () {
-  const indexPath = path.join('file://', __dirname, 'src/index.html')
-
-  mainWindow = new BrowserWindow({
-    icon: __dirname + '/resources/icons/128x128.png',
+  let mainWindow = new BrowserWindow({
+    icon: path.join(__dirname, '/resources/icons/128x128.png'),
     x: 0,
     y: 0,
     width: 500,
@@ -28,7 +23,7 @@ function createMainWindow () {
 
   mainWindow.setMenu(null)
 
-  mainWindow.loadURL(indexPath)
+  mainWindow.loadURL(path.join('file://', __dirname, 'src/index.html'))
 
   if (dev) {
     mainWindow.webContents.openDevTools()
@@ -37,11 +32,6 @@ function createMainWindow () {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-}
-
-app.on('ready', () => {
-  autoUpdater.checkForUpdatesAndNotify()
-  createMainWindow()
 })
 
 app.on('window-all-closed', () => {
@@ -50,3 +40,4 @@ app.on('window-all-closed', () => {
   }
 })
 
+require('./updater')

@@ -1,0 +1,33 @@
+{
+	"productName": "Scraper",
+	"appId": "com.cedoor.scraper",
+	"artifactName": "${productName}-${version}.${ext}",
+	"directories": {
+		"output": "builds",
+		"buildResources": "resources"
+	},
+	"files": [
+		"resources",
+		"src",
+		"updater.js",
+		"index.js"
+	],
+	"publish": {
+		"provider": "github",
+		"owner": "cedoor",
+		"repo": "scraper"
+	},
+	"nsis": {
+		"oneClick": false,
+		"allowToChangeInstallationDirectory": true,
+		"createDesktopShortcut": true
+	},
+	"linux": {
+		"category": "Utility",
+		"target": [
+			"deb",
+			"tar.gz",
+			"AppImage"
+		]
+	}
+}

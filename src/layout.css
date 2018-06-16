@@ -19,6 +19,12 @@ html, body {
     width: 100%;
 }
 
+.content .mdl-button {
+    margin: 0 5px;
+    background-color: #e6e6e6;
+    color: #666666;
+}
+
 #spinner {
     position: absolute;
     right: 15px;
@@ -31,8 +37,8 @@ html, body {
     margin-top: 10px;
     font-size: 15px;
     color: #666666;
-    height: 58px;
-    line-height: 58px;
+    height: 54px;
+    line-height: 54px;
     padding: 10px 20px;
     vertical-align: middle;
     text-overflow: ellipsis;

@@ -14,8 +14,6 @@ app.on('ready', () => {
 
   let mainWindow = new BrowserWindow({
     icon: path.join(__dirname, '/resources/icons/128x128.png'),
-    x: 0,
-    y: 0,
     width: 500,
     height: 300,
     resizable: false

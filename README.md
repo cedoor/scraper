@@ -6,7 +6,7 @@
 [![](https://img.shields.io/github/downloads/cedoor/scraper/total.svg?style=flat-square)](https://github.com/cedoor/scraper/releases)
 [![](https://img.shields.io/travis/cedoor/scraper.svg?style=flat-square)](https://travis-ci.org/cedoor/scraper)
 
-Simple desktop scraper app.
+Simple desktop scraper app. You can download the application [here](https://github.com/cedoor/scraper/releases/latest).
 
 ![Scraper app](https://raw.githubusercontent.com/cedoor/scraper/master/src/images/example.png)
 

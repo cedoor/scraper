@@ -28,7 +28,7 @@
 	},
 	"devDependencies": {
 		"electron": "2.0.2",
-		"electron-builder": "20.15.3",
+		"electron-builder": "20.13.3",
 		"electron-reload": "1.2.2",
 		"standard": "11.0.1"
 	}

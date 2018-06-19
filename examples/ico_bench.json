@@ -14,7 +14,7 @@
 		"name": "ICO list",
 		"options": {
 			"pagination": "a.next@href",
-			"limit": 299
+			"limit": 3
 		},
 		"url": "https://icobench.com/icos",
 		"scope": ".ico_list tr",

@@ -17,6 +17,30 @@ const toggleLoading = () => {
   dom.spinner.style.display = dom.spinner.style.display === 'block' ? 'none' : 'block'
 }
 
+const getOutputPath = (path, fileName) => {
+  return `${path.substring(0, path.lastIndexOf('/'))}/${fileName}`
+}
+
+const scrape = (url, scope = '', selectors, options) => {
+  return new Promise((resolve, reject) => {
+    const query = xray(url, scope, selectors)
+
+    if (options.pagination) {
+      query
+        .paginate(options.pagination)
+        .limit(options.limit)
+    }
+
+    query((err, res) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res)
+      }
+    })
+  })
+}
+
 const getValue = () => {
   const url = dom.url.value
   const selector = dom.selector.value
@@ -24,13 +48,11 @@ const getValue = () => {
   dom.result.innerHTML = ''
   toggleLoading()
 
-  xray(url, selector)((err, res) => {
-    if (err) {
-      dom.result.innerHTML = 'Error: ' + err
-    } else {
-      dom.result.innerHTML = res
-    }
-
+  scrape(url, null, selector).then((res) => {
+    dom.result.innerHTML = res
+    toggleLoading()
+  }).catch((err) => {
+    dom.result.innerHTML = 'Error: ' + err
     toggleLoading()
   })
 }
@@ -48,18 +70,54 @@ const uploadFile = () => {
     }]
   }, (files) => {
     if (files) {
-      const data = JSON.parse(fs.readFileSync(files[0]).toString())
+      const input = JSON.parse(fs.readFileSync(files[0]).toString())
       const path = files[0]
+      const promises = []
+      const options = input.options
+      const results = {
+        ...input.header,
+        websites: []
+      }
 
       dom.result.innerHTML = ''
       toggleLoading()
 
-      xray(data[0].url, data[0].scope, [data[0].selectors])((err, res) => {
-        if (err) {
-          dom.result.innerHTML = 'Error: ' + err
-        } else {
-          fs.writeFileSync(path.substring(0, path.lastIndexOf('/')) + '/output.json', JSON.stringify(res))
+      if (options.pagination) {
+        const website = input.websites[0]
+
+        let promise = scrape(website.url, website.scope, [website.selectors], options).then((res) => {
+          delete website.scope
+          delete website.selectors
+
+          const result = website
+          result.results = res
+
+          results.websites.push(result)
+        }).catch((err) => {
+          console.error(err)
+        })
+
+        promises.push(promise)
+      } else {
+        for (let website of input.websites) {
+          let promise = scrape(website.url, website.scope, [website.selectors], options).then((res) => {
+            delete website.scope
+            delete website.selectors
+
+            const result = website
+            result.results = res
+
+            results.websites.push(result)
+          }).catch((err) => {
+            console.error(err)
+          })
+
+          promises.push(promise)
         }
+      }
+
+      Promise.all(promises).then(() => {
+        fs.writeFileSync(getOutputPath(path, 'data.json'), JSON.stringify(results, null, 4))
 
         toggleLoading()
       })

@@ -21,7 +21,7 @@ const getOutputPath = (path, fileName) => {
   return `${path.substring(0, path.lastIndexOf('/'))}/${fileName}`
 }
 
-const scrape = (url, scope = '', selectors, options) => {
+const scrape = (url, scope = 'html', selectors, options) => {
   return new Promise((resolve, reject) => {
     const query = xray(url, scope, selectors)
 
@@ -73,7 +73,6 @@ const uploadFile = () => {
       const input = JSON.parse(fs.readFileSync(files[0]).toString())
       const path = files[0]
       const promises = []
-      const options = input.options
       const results = {
         ...input.header,
         websites: []
@@ -82,12 +81,11 @@ const uploadFile = () => {
       dom.result.innerHTML = ''
       toggleLoading()
 
-      if (options.pagination) {
-        const website = input.websites[0]
-
-        let promise = scrape(website.url, website.scope, [website.selectors], options).then((res) => {
+      for (let website of input.websites) {
+        let promise = scrape(website.url, website.scope, [website.selectors], website.options).then((res) => {
           delete website.scope
           delete website.selectors
+          delete website.options
 
           const result = website
           result.results = res
@@ -98,22 +96,6 @@ const uploadFile = () => {
         })
 
         promises.push(promise)
-      } else {
-        for (let website of input.websites) {
-          let promise = scrape(website.url, website.scope, [website.selectors], options).then((res) => {
-            delete website.scope
-            delete website.selectors
-
-            const result = website
-            result.results = res
-
-            results.websites.push(result)
-          }).catch((err) => {
-            console.error(err)
-          })
-
-          promises.push(promise)
-        }
       }
 
       Promise.all(promises).then(() => {

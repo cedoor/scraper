@@ -25,7 +25,7 @@ const scrape = (url, scope = 'html', selectors, options) => {
   return new Promise((resolve, reject) => {
     const query = xray(url, scope, selectors)
 
-    if (options.pagination) {
+    if (options && options.pagination) {
       query
         .paginate(options.pagination)
         .limit(options.limit)

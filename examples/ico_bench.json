@@ -1,0 +1,31 @@
+{
+	"header": {
+		"name": "ICObench icos"
+	},
+	"websites": [{
+		"name": "General info",
+		"options": {},
+		"url": "https://icobench.com/icos",
+		"selectors": {
+			"title": "title",
+			"pages": "a.num:nth-child(10)"
+		}
+	}, {
+		"name": "ICO list",
+		"options": {
+			"pagination": "a.next@href",
+			"limit": 299
+		},
+		"url": "https://icobench.com/icos",
+		"scope": ".ico_list tr",
+		"selectors": {
+			"name": "a.name",
+			"url": "a.name@href",
+			"logo": "a.image@style",
+			"desc": "div.content p",
+			"rating": "div.rate",
+			"icoStart": "td.rmv:nth-child(2)",
+			"icoEnd": "td.rmv:nth-child(3)"
+		}
+	}]
+}

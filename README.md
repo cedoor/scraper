@@ -8,6 +8,8 @@
 
 Simple desktop scraper app. You can download the application [here](https://github.com/cedoor/scraper/releases/latest).
 
+With **Scraper** it is possible to load a json file with a specific structure ([x-ray](https://github.com/matthewmueller/x-ray) like) for automated scraping (you can find some examples in the `examples` folder) or simply by inserting the url and the selector directly into the app. 
+
 ![Scraper app](https://raw.githubusercontent.com/cedoor/scraper/master/src/images/example.png)
 
 ## Development

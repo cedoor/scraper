@@ -2,7 +2,15 @@ const {dialog} = require('electron').remote
 const fs = require('fs')
 const Xray = require('x-ray')
 
-const xray = Xray()
+const xray = Xray({
+  filters: {
+    trim: (value) => typeof value === 'string' ? value.trim() : value,
+    reverse: (value) => typeof value === 'string' ? value.split('').reverse().join('') : value,
+    slice: (value, start, end) => typeof value === 'string' ? value.slice(start, end) : value,
+    oneSpace: (value) => typeof value === 'string' ? value.replace(/\s\s+/g, ' ') : value,
+    toNumber: (value) => typeof value === 'string' ? parseFloat(value) : value
+  }
+})
 
 const dom = {
   url: window.document.querySelector('#url'),
@@ -19,6 +27,25 @@ const toggleLoading = () => {
 
 const getOutputPath = (path, fileName) => {
   return `${path.substring(0, path.lastIndexOf('/'))}/${fileName}`
+}
+
+const sanitizeSelectors = (selectors) => {
+  let sanitized = false
+
+  if (typeof selectors !== 'string') {
+    for (const key in selectors) {
+      if (selectors.hasOwnProperty(key)) {
+        const selector = selectors[key]
+
+        if (typeof selector !== 'string') {
+          sanitized = true
+          selectors[key] = xray(selector.url, selector.selectors)
+        }
+      }
+    }
+  }
+
+  return sanitized
 }
 
 const scrape = (url, scope = 'html', selectors, options) => {
@@ -82,10 +109,16 @@ const uploadFile = () => {
       toggleLoading()
 
       for (let website of input.websites) {
+        const sanitized = sanitizeSelectors(website.selectors)
+
         let promise = scrape(website.url, website.scope, [website.selectors], website.options).then((res) => {
           delete website.scope
           delete website.selectors
           delete website.options
+
+          if (sanitized) {
+            res.shift()
+          }
 
           const result = website
           result.results = res

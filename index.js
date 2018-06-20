@@ -10,13 +10,12 @@ if (dev) {
 }
 
 app.on('ready', () => {
-  console.log(path.join('file://', __dirname, '/resources/icons/128x128.png'))
-
   let mainWindow = new BrowserWindow({
     icon: path.join(__dirname, '/resources/icons/128x128.png'),
-    width: 500,
-    height: 300,
-    resizable: false
+    width: 600,
+    height: 400,
+    minWidth: 600,
+    minHeight: 400
   })
 
   mainWindow.setMenu(null)

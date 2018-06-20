@@ -10,8 +10,8 @@
 </head>
 <body>
 <div id="spinner" class="mdl-spinner mdl-js-spinner is-active"></div>
-<div class="content">
-    <div>
+<div id="content">
+    <div class="row">
         <div class="mdl-textfield mdl-js-textfield">
             <input class="mdl-textfield__input" type="text" id="url">
             <label class="mdl-textfield__label" for="url">Url</label>
@@ -20,14 +20,18 @@
             <input class="mdl-textfield__input" type="text" id="selector">
             <label class="mdl-textfield__label" for="selector">Selector</label>
         </div>
+    </div>
+    <div class="row">
         <a id="upload" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
             <i class="material-icons">insert_drive_file</i>
         </a>
+        <div class="mdl-tooltip" data-mdl-for="upload">Upload file</div>
         <a id="button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
             <i class="material-icons">play_arrow</i>
         </a>
-        <div id="result"></div>
+        <div class="mdl-tooltip" data-mdl-for="button">Scrape website</div>
     </div>
+    <div class="row" id="result"></div>
 </div>
 </body>
 <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>

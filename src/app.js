@@ -132,7 +132,14 @@ const uploadFile = () => {
       }
 
       Promise.all(promises).then(() => {
-        fs.writeFileSync(getOutputPath(path, 'data.json'), JSON.stringify(results, null, 4))
+        dialog.showSaveDialog({
+          title: 'Save file',
+          defaultPath: 'data.json'
+        }, (path) => {
+          if (typeof path === 'string') {
+            fs.writeFileSync(path, JSON.stringify(results, null, 4))
+          }
+        })
 
         toggleLoading()
       })

@@ -1,0 +1,42 @@
+{
+	"header": {
+		"name": "ICObench people"
+	},
+	"websites": [
+		{
+			"name": "General info",
+			"options": {},
+			"url": "https://icobench.com/people",
+			"selectors": {
+				"title": "title",
+				"pages": "a.num:nth-child(10) | toNumber"
+			}
+		},
+		{
+			"name": "People list",
+			"options": {
+				"pagination": "a.next@href",
+				"limit": 10
+			},
+			"url": "https://icobench.com/people",
+			"scope": ".ico_list tr",
+			"selectors": [
+				{
+					"name": "div.people_content a.name | trim",
+					"role": "div.people_content p | trim",
+					"url": "div.image_box_people a.image@href",
+					"icos": "td.rmv:nth-child(2)",
+					"iss": "td.rmv:nth-child(3) div.rate",
+					"details": {
+						"url": "div.image_box_people a.image@href",
+						"selectors": {
+							"icos": [
+								"div.icos > div a.group | trim"
+							]
+						}
+					}
+				}
+			]
+		}
+	]
+}

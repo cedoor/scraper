@@ -1,0 +1,29 @@
+{
+	"header": {
+		"name": "ICObench ico"
+	},
+	"websites": [
+		{
+			"name": "ICO profile",
+			"options": {},
+			"url": "https://icobench.com/ico/casper",
+			"selectors": {
+				"ico-profile": "div.distribution div.wrapper | trim | oneSpace",
+				"distribution": [
+					"div.distribution div.columns > div | trim | oneSpace"
+				],
+				"team": [
+					"#team div.row > div > h3"
+				],
+				"token": "div.financial_data > div:nth-child(5) > div:nth-child(2) | trim",
+				"price": "div.financial_data > div:nth-child(6) > div:nth-child(2) | trim",
+				"platform": "div.financial_data > div:nth-child(8) > div:nth-child(2) | trim",
+				"accepting": "div.financial_data > div:nth-child(9) > div:nth-child(2) | trim",
+				"soft-cap": "div.financial_data > div:nth-child(10) > div:nth-child(2) | trim",
+				"hard-cap": "div.financial_data > div:nth-child(11) > div:nth-child(2) | trim",
+				"country": "div.financial_data > div:nth-child(12) > div:nth-child(2) | trim",
+				"about": "#about > p"
+			}
+		}
+	]
+}

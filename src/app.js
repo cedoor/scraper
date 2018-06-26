@@ -1,6 +1,7 @@
-const {dialog} = require('electron').remote
+const {dialog, shell} = require('electron').remote
 const fs = require('fs')
 const Xray = require('x-ray')
+const JSONFormatter = require('json-formatter-js').default
 
 const xray = Xray({
   filters: {
@@ -18,26 +19,29 @@ const dom = {
   result: window.document.querySelector('#result'),
   spinner: window.document.querySelector('#spinner'),
   button: window.document.querySelector('#button'),
-  upload: window.document.querySelector('#upload')
+  upload: window.document.querySelector('#upload'),
+  download: window.document.querySelector('#download')
 }
+
+let results = ''
 
 const toggleLoading = () => {
   dom.spinner.style.display = dom.spinner.style.display === 'block' ? 'none' : 'block'
 }
 
-const getOutputPath = (path, fileName) => {
-  return `${path.substring(0, path.lastIndexOf('/'))}/${fileName}`
-}
-
 const sanitizeSelectors = (selectors) => {
   let sanitized = false
+
+  if (Array.isArray(selectors)) {
+    selectors = selectors[0]
+  }
 
   if (typeof selectors !== 'string') {
     for (const key in selectors) {
       if (selectors.hasOwnProperty(key)) {
         const selector = selectors[key]
 
-        if (typeof selector !== 'string') {
+        if (typeof selector !== 'string' && !Array.isArray(selector)) {
           sanitized = true
           selectors[key] = xray(selector.url, selector.selectors)
         }
@@ -76,11 +80,28 @@ const getValue = () => {
   toggleLoading()
 
   scrape(url, null, selector).then((res) => {
+    results = res
+
     dom.result.innerHTML = res
     toggleLoading()
   }).catch((err) => {
     dom.result.innerHTML = 'Error: ' + err
     toggleLoading()
+  })
+}
+
+const downloadFile = () => {
+  dialog.showSaveDialog({
+    title: 'Save file',
+    defaultPath: 'data.json'
+  }, (path) => {
+    if (typeof path === 'string') {
+      if (typeof results === 'string') {
+        results = {results}
+      }
+
+      fs.writeFileSync(path, JSON.stringify(results, null, 4))
+    }
   })
 }
 
@@ -98,9 +119,9 @@ const uploadFile = () => {
   }, (files) => {
     if (files) {
       const input = JSON.parse(fs.readFileSync(files[0]).toString())
-      const path = files[0]
       const promises = []
-      const results = {
+
+      results = {
         ...input.header,
         websites: []
       }
@@ -111,7 +132,7 @@ const uploadFile = () => {
       for (let website of input.websites) {
         const sanitized = sanitizeSelectors(website.selectors)
 
-        let promise = scrape(website.url, website.scope, [website.selectors], website.options).then((res) => {
+        let promise = scrape(website.url, website.scope, website.selectors, website.options).then((res) => {
           delete website.scope
           delete website.selectors
           delete website.options
@@ -132,14 +153,23 @@ const uploadFile = () => {
       }
 
       Promise.all(promises).then(() => {
-        dialog.showSaveDialog({
-          title: 'Save file',
-          defaultPath: 'data.json'
-        }, (path) => {
-          if (typeof path === 'string') {
-            fs.writeFileSync(path, JSON.stringify(results, null, 4))
+        const formatter = new JSONFormatter(results)
+
+        dom.result.appendChild(formatter.render())
+
+        formatter.openAtDepth(10)
+
+        // Open urls with external browser
+        setTimeout(() => {
+          const urls = window.document.getElementsByClassName('json-formatter-url')
+
+          for (const url of urls) {
+            url.onclick = (event) => {
+              event.preventDefault()
+              shell.openExternal(url.href)
+            }
           }
-        })
+        }, 1000)
 
         toggleLoading()
       })
@@ -155,3 +185,4 @@ window.onkeydown = (event) => {
 
 dom.button.onclick = getValue
 dom.upload.onclick = uploadFile
+dom.download.onclick = downloadFile

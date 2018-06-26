@@ -38,13 +38,12 @@ html, body {
 
 #result {
     display: flex;
-    justify-content: center;
     flex-direction: column;
-    text-align: center;
+    text-align: left;
     border: 1px solid lightgray;
     margin-top: 20px;
     padding: 20px;
     font-size: 15px;
     color: #666666;
-    overflow-y: auto;
+    overflow: auto;
 }

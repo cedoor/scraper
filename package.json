@@ -22,9 +22,10 @@
 	},
 	"homepage": "https://github.com/cedoor/scraper#readme",
 	"dependencies": {
-		"x-ray": "2.3.2",
 		"electron-log": "2.2.14",
-		"electron-updater": "2.21.10"
+		"electron-updater": "2.21.10",
+		"json-formatter-js": "2.2.0",
+		"x-ray": "2.3.2"
 	},
 	"devDependencies": {
 		"electron": "2.0.2",

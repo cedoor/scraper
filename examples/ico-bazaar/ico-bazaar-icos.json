@@ -1,0 +1,53 @@
+{
+	"header": {
+		"name": "ICOBazaar icos"
+	},
+	"websites": [
+		{
+			"name": "General info",
+			"options": {},
+			"url": "https://icobazaar.com/v2/ico-list",
+			"selectors": {
+				"title": "title",
+				"pages": "div.paginator li:nth-child(12) | toNumber"
+			}
+		},
+		{
+			"name": "ICO list",
+			"options": {
+				"pagination": "li.next a@href",
+				"limit": 78
+			},
+			"url": "https://icobazaar.com/v2/ico-list",
+			"scope": ".icos-list div.ico",
+			"selectors": [
+				{
+					"name": "h5",
+					"url": "a.ico-link@href",
+					"logo": "div.ico-image img@src",
+					"details": {
+						"url": "a.ico-link@href",
+						"selectors": {
+							"desc": "div.com-details__content | trim",
+							"status": "div.com-sidebar__info-line:nth-child(1) span.com-sidebar__info-value > span",
+							"icoStart": "div.com-sidebar__info-line:nth-child(2) span.com-sidebar__info-value | trim",
+							"icoEnd": "div.com-sidebar__info-line:nth-child(3) span.com-sidebar__info-value | trim",
+							"cap": "div.com-sidebar__info-line:nth-child(4) span.com-sidebar__info-value | trim",
+							"goal": "div.com-sidebar__info-line:nth-child(5) span.com-sidebar__info-value | trim",
+							"price": "div.com-sidebar__info-line:nth-child(6) span.com-sidebar__info-value | trim",
+							"team": {
+								"url": "div.ico-profile div.com-header__btns > a:nth-child(3)@href",
+								"selectors": ["div.user-card__name"]
+							},
+							"teamRating": "div.com-rating__list-element:nth-child(1) > div.progress-bar > span@style | getNumber:0",
+							"ideaRating": "div.com-rating__list-element:nth-child(2) > div.progress-bar > span@style | getNumber:0",
+							"technologyRating": "div.com-rating__list-element:nth-child(3) > div.progress-bar > span@style | getNumber:0",
+							"mediaRating": "div.com-rating__list-element:nth-child(4) > div.progress-bar > span@style | getNumber:0",
+							"usersRating": "div.com-rating__list-element:nth-child(5) > div.progress-bar > span@style | getNumber:0"
+						}
+					}
+				}
+			]
+		}
+	]
+}

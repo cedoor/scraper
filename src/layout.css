@@ -36,6 +36,12 @@ html, body {
     color: #666666;
 }
 
+#result-buttons {
+    position: fixed;
+    right: 40px;
+    top: 237px;
+}
+
 #result {
     display: flex;
     flex-direction: column;

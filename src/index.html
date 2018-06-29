@@ -29,10 +29,21 @@
         <a id="button" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
             <i class="material-icons">play_arrow</i>
         </a>
-        <a id="download" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
-            <i class="material-icons">save_alt</i>
-        </a>
         <div class="mdl-tooltip" data-mdl-for="button">Scrape website</div>
+        <a id="stop" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+            <i class="material-icons">stop</i>
+        </a>
+        <div class="mdl-tooltip" data-mdl-for="stop">Stop scraping</div>
+        <div id="result-buttons">
+            <a id="download" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+                <i class="material-icons">save_alt</i>
+            </a>
+            <div class="mdl-tooltip" data-mdl-for="download">Save json</div>
+            <a id="clear" class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+                <i class="material-icons">clear</i>
+            </a>
+            <div class="mdl-tooltip" data-mdl-for="clear">Clear output</div>
+        </div>
     </div>
     <div class="row" id="result"></div>
 </div>

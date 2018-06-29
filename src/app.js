@@ -9,7 +9,8 @@ const xray = Xray({
     reverse: (value) => typeof value === 'string' ? value.split('').reverse().join('') : value,
     slice: (value, start, end) => typeof value === 'string' ? value.slice(start, end) : value,
     oneSpace: (value) => typeof value === 'string' ? value.replace(/\s\s+/g, ' ') : value,
-    toNumber: (value) => typeof value === 'string' ? parseFloat(value) : value
+    toNumber: (value) => typeof value === 'string' ? parseFloat(value) : value,
+    getNumber: (value, index) => typeof value === 'string' ? parseFloat(value.match(/\d+/)[index]) : value
   }
 })
 
@@ -20,13 +21,18 @@ const dom = {
   spinner: window.document.querySelector('#spinner'),
   button: window.document.querySelector('#button'),
   upload: window.document.querySelector('#upload'),
-  download: window.document.querySelector('#download')
+  download: window.document.querySelector('#download'),
+  clear: window.document.querySelector('#clear')
 }
 
 let results = ''
 
-const toggleLoading = () => {
-  dom.spinner.style.display = dom.spinner.style.display === 'block' ? 'none' : 'block'
+const toggleLoading = (status) => {
+  if (typeof status !== 'boolean') {
+    dom.spinner.style.display = dom.spinner.style.display === 'block' ? 'none' : 'block'
+  } else {
+    dom.spinner.style.display = status ? 'block' : 'none'
+  }
 }
 
 const sanitizeSelectors = (selectors) => {
@@ -43,6 +49,8 @@ const sanitizeSelectors = (selectors) => {
 
         if (typeof selector !== 'string' && !Array.isArray(selector)) {
           sanitized = true
+          sanitizeSelectors(selector.selectors)
+
           selectors[key] = xray(selector.url, selector.selectors)
         }
       }
@@ -88,6 +96,13 @@ const getValue = () => {
     dom.result.innerHTML = 'Error: ' + err
     toggleLoading()
   })
+}
+
+const clearOutput = () => {
+  if (dom.result.innerHTML !== '') {
+    dom.result.innerHTML = ''
+    toggleLoading(false)
+  }
 }
 
 const dragAndDropListener = () => {
@@ -214,5 +229,6 @@ window.onkeydown = (event) => {
 dom.button.onclick = getValue
 dom.upload.onclick = uploadFile
 dom.download.onclick = downloadFile
+dom.clear.onclick = clearOutput
 
 dragAndDropListener()

@@ -1,4 +1,4 @@
-const {dialog, shell} = require('electron').remote
+const {dialog, shell, getCurrentWindow} = require('electron').remote
 const fs = require('fs')
 const Xray = require('x-ray')
 const JSONFormatter = require('json-formatter-js').default
@@ -22,7 +22,8 @@ const dom = {
   button: window.document.querySelector('#button'),
   upload: window.document.querySelector('#upload'),
   download: window.document.querySelector('#download'),
-  clear: window.document.querySelector('#clear')
+  clear: window.document.querySelector('#clear'),
+  refresh: window.document.querySelector('#refresh')
 }
 
 let results = ''
@@ -103,6 +104,12 @@ const clearOutput = () => {
     dom.result.innerHTML = ''
     toggleLoading(false)
   }
+}
+
+const refresh = () => {
+  const currentWindow = getCurrentWindow()
+
+  currentWindow.reload()
 }
 
 const dragAndDropListener = () => {
@@ -230,5 +237,6 @@ dom.button.onclick = getValue
 dom.upload.onclick = uploadFile
 dom.download.onclick = downloadFile
 dom.clear.onclick = clearOutput
+dom.refresh.onclick = refresh
 
 dragAndDropListener()

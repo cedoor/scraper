@@ -1,5 +1,21 @@
-html, body {
+html, body, #no-connection {
     height: 100%;
+}
+
+#no-connection {
+    display: none;
+}
+
+#no-connection > p {
+    text-align: center;
+    position: relative;
+    top: 50%;
+}
+
+#no-connection > p > span {
+    text-decoration: underline;
+    color: #0277bd;
+    cursor: pointer;
 }
 
 #spinner {

@@ -15,6 +15,8 @@ const xray = Xray({
 })
 
 const dom = {
+  content: window.document.querySelector('#content'),
+  noConnection: window.document.querySelector('#no-connection'),
   url: window.document.querySelector('#url'),
   selector: window.document.querySelector('#selector'),
   result: window.document.querySelector('#result'),
@@ -24,6 +26,12 @@ const dom = {
   download: window.document.querySelector('#download'),
   clear: window.document.querySelector('#clear'),
   refresh: window.document.querySelector('#refresh')
+}
+
+// Internet connection check
+if (window.navigator.onLine === false) {
+  dom.content.style.display = 'none'
+  dom.noConnection.style.display = 'block'
 }
 
 let results = ''
@@ -225,6 +233,6 @@ dom.button.onclick = getValue
 dom.upload.onclick = uploadFile
 dom.download.onclick = downloadFile
 dom.clear.onclick = clearOutput
-dom.refresh.onclick = refresh
+dom.refresh.onclick = dom.noConnection.onclick = refresh
 
 dragAndDropListener()

@@ -1,4 +1,4 @@
-const {dialog, shell, getCurrentWindow} = require('electron').remote
+const {dialog, getCurrentWindow} = require('electron').remote
 const fs = require('fs')
 const Xray = require('x-ray')
 const JSONFormatter = require('json-formatter-js').default
@@ -208,18 +208,6 @@ const uploadFile = () => {
         dom.result.appendChild(formatter.render())
 
         formatter.openAtDepth(10)
-
-        // Open urls with external browser
-        setTimeout(() => {
-          const urls = window.document.getElementsByClassName('json-formatter-url')
-
-          for (const url of urls) {
-            url.onclick = (event) => {
-              event.preventDefault()
-              shell.openExternal(url.href)
-            }
-          }
-        }, 1000)
 
         toggleLoading()
       })

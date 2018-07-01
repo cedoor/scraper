@@ -53,3 +53,10 @@ html, body {
     color: #666666;
     overflow: auto;
 }
+
+/* json-formatter-js override */
+.json-formatter-url {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none !important;
+}

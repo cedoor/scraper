@@ -8,6 +8,7 @@
 	},
 	"files": [
 		"resources",
+		"lib",
 		"src",
 		"updater.js",
 		"index.js"

@@ -12,6 +12,159 @@ With **Scraper** it is possible to load a json file with a specific structure ([
 
 ![Scraper app](https://raw.githubusercontent.com/cedoor/scraper/master/src/images/example.png)
 
+The input file for the result of the image above:
+
+```javascript
+{
+    "header": {
+		"name": "Scraper repository"
+	},
+	"websites": [
+		{
+			"name": "Github",
+			"options": {},
+			"url": "https://github.com/cedoor/scraper",
+			"selectors": {
+				"description": ".repository-meta-content .text-gray-dark | trim",
+				"commits": ".stats-switcher-wrapper .numbers-summary > li:nth-child(1) .num | trim",
+				"branches": ".stats-switcher-wrapper .numbers-summary > li:nth-child(2) .num | trim",
+				"releases": ".stats-switcher-wrapper .numbers-summary > li:nth-child(3) .num | trim",
+				"contributors": ".stats-switcher-wrapper .numbers-summary > li:nth-child(4) .num | trim",
+				"license": ".stats-switcher-wrapper .numbers-summary > li:nth-child(5) a | trim",
+				"lastCommits": {
+					"url": ".commits > a@href",
+					"selectors": [
+						".commit-group > li .commit-title a"
+					]
+				}
+			}
+		}
+	]
+}
+```
+## Usage
+
+**Scraper** get an input json file divided mainly into two parts:
+1. header: with the information you want to make visible in the output json,
+2. websites: a list of website configurations used for scraping.
+
+In the website configuration you can pass custom parameters (as `name` above) and you have to pass the configuration fields:
+* url of the website,
+* scope of the selectors (optional),
+* selectors of the page,
+* additional options as (at the moment):
+    * pagination: url with the `next` link,
+    * limit: number of pages to scrape.
+
+The selector rules are the same as [x-ray](https://github.com/matthewmueller/x-ray). Below some use cases:
+
+#### Scrape a single selector:
+
+```
+{
+    "options": {},
+    "url": "https://github.com/cedoor/scraper",
+    "selectors": ".repository-meta-content .text-gray-dark | trim"
+}
+```
+
+#### Scrape an attribute:
+
+```
+{
+    "options": {},
+    "url": "https://github.com/cedoor/scraper",
+    "selectors": {
+        "linkOfCommits": ".commits > a@href"
+    }
+}
+```
+
+#### Scrape innerHTML:
+
+```
+{
+    "options": {},
+    "url": "https://github.com/cedoor/scraper",
+    "selectors": {
+        "body": "body@html"
+    }
+}
+```
+
+#### Scrape with a scope:
+
+```
+{
+    "options": {},
+    "url": "https://github.com/cedoor/scraper",
+    "scope": "body",
+    "selectors": {
+        "description": ".repository-meta-content .text-gray-dark | trim"
+    }
+}
+```
+
+#### Scrape with collections:
+
+```
+{
+    "options": {},
+    "url": "https://github.com/cedoor/scraper/commits/master",
+    "selectors": [
+        ".commit-group > li .commit-title a"
+    ]
+}
+```
+
+#### Scrape with pagination:
+
+```
+{
+    "options": {
+        "pagination": "li.next a@href",
+        "limit": 78
+    },
+    "url": "https://icobazaar.com/v2/ico-list",
+    "scope": ".icos-list div.ico",
+    "selectors": [{
+        "name": "h5"
+    }]
+}
+```
+
+#### Crawling to another site:
+
+```
+{
+    "options": {},
+    "url": "https://github.com/cedoor/scraper",
+    "selectors": {
+        ...
+        "lastCommits": {
+            "url": ".commits > a@href",
+            "selectors": [
+                ".commit-group > li .commit-title a"
+            ]   
+        }
+    }
+}
+```
+
+It is possible to nest sub-sites.
+
+### Filters
+
+In addition there are filters that you can use to improve the values of the selectors:
+* trim: `"selector": ".class | trim"` -> Removes whitespace from both ends of a string,
+* reverse: `"selector": ".class | reverse"` -> Reverses a string,
+* slice: `"selector": ".class | slice:2,3"` -> Extracts a section of a string and returns it as a new string,
+* oneSpace: `"selector": ".class | oneSpace"` -> Replaces all spaces with one space,
+* toNumber: `"selector": ".class | toNumber"` -> Parses a string and returns a float or an integer,
+* getNumber: `"selector": ".class | getNumber"` -> Finds the numbers in a string and returns the i-th.
+
+Other filters will be added later.
+
 ## Development
 
 ### Clone and install dependencies

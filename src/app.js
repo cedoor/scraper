@@ -195,7 +195,7 @@ const uploadFile = () => {
           delete website.selectors
           delete website.options
 
-          if (sanitized) {
+          if (sanitized && Array.isArray(res)) {
             res.shift()
           }
 

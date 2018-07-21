@@ -16,9 +16,12 @@
 				"license": ".stats-switcher-wrapper .numbers-summary > li:nth-child(5) a | trim",
 				"lastCommits": {
 					"url": ".commits > a@href",
-					"selectors": [
-						".commit-group > li .commit-title a"
-					]
+					"scope": ".commit-group > li",
+					"selectors": [{
+						"message": ".message",
+						"author": ".commit-author",
+						"time": "relative-time"
+					}]
 				}
 			}
 		}

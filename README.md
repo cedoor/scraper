@@ -104,6 +104,24 @@ The selector rules are the same as [x-ray](https://github.com/matthewmueller/x-r
     }
 }
 ```
+or
+
+```
+{
+    "options": {},
+    "url": "https://github.com/cedoor/scraper",
+    "selectors": {
+        "description": ".repository-meta-content .text-gray-dark | trim",
+        "files": {
+            "scope": ".files .js-navigation-item",
+            "selectors": [{
+                "name": ".js-navigation-open",
+                "lastCommit": ".message | trim"
+            }]
+        }
+    }
+}
+```
 
 #### Scrape with collections:
 
@@ -152,6 +170,27 @@ The selector rules are the same as [x-ray](https://github.com/matthewmueller/x-r
 ```
 
 It is possible to nest sub-sites.
+
+#### Crawling to another site with scope:
+
+```
+{
+    "options": {},
+    "url": "https://github.com/cedoor/scraper",
+    "selectors": {
+    	...
+        "lastCommits": {
+            "url": ".commits > a@href",
+            "scope": ".commit-group > li",
+            "selectors": [{
+                "message": ".message",
+                "author": ".commit-author",
+                "time": "relative-time"
+            }]
+        }
+    }
+}
+```
 
 ### Filters
 

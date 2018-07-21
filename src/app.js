@@ -60,7 +60,15 @@ const sanitizeSelectors = (selectors) => {
           sanitized = true
           sanitizeSelectors(selector.selectors)
 
-          selectors[key] = xray(selector.url, selector.selectors)
+          if (selector.scope) {
+            selector.selectors = xray(selector.scope, selector.selectors)
+          }
+
+          if (selector.url) {
+            selectors[key] = xray(selector.url, selector.selectors)
+          } else {
+            selectors[key] = xray(selector.selectors)
+          }
         }
       }
     }

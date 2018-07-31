@@ -1,32 +1,9 @@
-const {dialog, getCurrentWindow} = require('electron').remote
+const {dialog} = require('electron').remote
 const fs = require('fs')
 const Xray = require('x-ray')
 const JSONFormatter = require('json-formatter-js').default
 
-const xray = Xray({
-  filters: {
-    trim: (value) => typeof value === 'string' ? value.trim() : value,
-    reverse: (value) => typeof value === 'string' ? value.split('').reverse().join('') : value,
-    slice: (value, start, end) => typeof value === 'string' ? value.slice(start, end) : value,
-    oneSpace: (value) => typeof value === 'string' ? value.replace(/\s\s+/g, ' ') : value,
-    toNumber: (value) => typeof value === 'string' ? parseFloat(value) : value,
-    getNumber: (value, index) => typeof value === 'string' ? parseFloat(value.match(/\d+/)[index]) : value
-  }
-})
-
-const dom = {
-  content: window.document.querySelector('#content'),
-  noConnection: window.document.querySelector('#no-connection'),
-  url: window.document.querySelector('#url'),
-  selector: window.document.querySelector('#selector'),
-  result: window.document.querySelector('#result'),
-  spinner: window.document.querySelector('#spinner'),
-  button: window.document.querySelector('#button'),
-  upload: window.document.querySelector('#upload'),
-  download: window.document.querySelector('#download'),
-  clear: window.document.querySelector('#clear'),
-  refresh: window.document.querySelector('#refresh')
-}
+const xray = Xray({filters})
 
 // Internet connection check
 if (window.navigator.onLine === false) {
@@ -35,14 +12,6 @@ if (window.navigator.onLine === false) {
 }
 
 let results = ''
-
-const toggleLoading = (status) => {
-  if (typeof status !== 'boolean') {
-    dom.spinner.style.display = dom.spinner.style.display === 'block' ? 'none' : 'block'
-  } else {
-    dom.spinner.style.display = status ? 'block' : 'none'
-  }
-}
 
 const sanitizeSelectors = (selectors) => {
   let sanitized = false
@@ -102,58 +71,17 @@ const getValue = () => {
   const selector = dom.selector.value
 
   dom.result.innerHTML = ''
-  toggleLoading()
+  utils.toggleLoading()
 
   scrape(url, null, selector).then((res) => {
     results = res
 
     dom.result.innerHTML = res
-    toggleLoading()
+    utils.toggleLoading()
   }).catch((err) => {
     dom.result.innerHTML = 'Error: ' + err
-    toggleLoading()
+    utils.toggleLoading()
   })
-}
-
-const clearOutput = () => {
-  if (dom.result.innerHTML !== '') {
-    dom.result.innerHTML = ''
-    toggleLoading(false)
-  }
-}
-
-const refresh = () => {
-  const currentWindow = getCurrentWindow()
-
-  currentWindow.reload()
-}
-
-const dragAndDropListener = () => {
-  window.document.ondragover = window.document.ondrop = (event) => {
-    event.preventDefault()
-  }
-
-  window.document.body.ondrop = (event) => {
-    event.preventDefault()
-
-    let files = event.dataTransfer.files
-
-    if (files.length > 0) {
-      const url = files[0].path
-      let extension = url.split('.').pop()
-
-      if (extension === 'json') {
-        const data = fs.readFileSync(url).toString()
-        const formatter = new JSONFormatter(JSON.parse(data))
-
-        dom.result.innerHTML = ''
-
-        dom.result.appendChild(formatter.render())
-
-        formatter.openAtDepth(10)
-      }
-    }
-  }
 }
 
 const downloadFile = () => {
@@ -193,7 +121,7 @@ const uploadFile = () => {
       }
 
       dom.result.innerHTML = ''
-      toggleLoading()
+      utils.toggleLoading()
 
       for (let website of input.websites) {
         const sanitized = sanitizeSelectors(website.selectors)
@@ -225,22 +153,8 @@ const uploadFile = () => {
 
         formatter.openAtDepth(10)
 
-        toggleLoading()
+        utils.toggleLoading()
       })
     }
   })
 }
-
-window.onkeydown = (event) => {
-  if (event.code === 'Enter') {
-    getValue()
-  }
-}
-
-dom.button.onclick = getValue
-dom.upload.onclick = uploadFile
-dom.download.onclick = downloadFile
-dom.clear.onclick = clearOutput
-dom.refresh.onclick = dom.noConnection.onclick = refresh
-
-dragAndDropListener()

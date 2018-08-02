@@ -1,9 +1,3 @@
-window.onkeydown = (event) => {
-  if (event.code === 'Enter') {
-    getValue()
-  }
-}
-
 window.document.ondragover = window.document.ondrop = (event) => {
   event.preventDefault()
 }

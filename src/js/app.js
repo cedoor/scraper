@@ -95,18 +95,20 @@ const scrape = () => {
 }
 
 const download = () => {
-  dialog.showSaveDialog({
-    title: 'Save file',
-    defaultPath: 'data.json'
-  }, (path) => {
-    if (typeof path === 'string') {
-      if (typeof results === 'string') {
-        results = {results}
-      }
+  if (results) {
+    dialog.showSaveDialog({
+      title: 'Save file',
+      defaultPath: 'data.json'
+    }, (path) => {
+      if (typeof path === 'string') {
+        if (typeof results === 'string') {
+          results = {results}
+        }
 
-      fs.writeFileSync(path, JSON.stringify(results, null, 4))
-    }
-  })
+        fs.writeFileSync(path, JSON.stringify(results, null, 4))
+      }
+    })
+  }
 }
 
 const upload = () => {

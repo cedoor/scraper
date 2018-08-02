@@ -14,7 +14,7 @@ app.on('ready', () => {
     icon: path.join(__dirname, '/resources/icons/128x128.png'),
     width: 1000,
     height: 800,
-    minWidth: 1000,
+    minWidth: 800,
     minHeight: 700
   })
 

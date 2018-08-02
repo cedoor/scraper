@@ -19,19 +19,16 @@ window.document.body.ondrop = (event) => {
 
     if (extension === 'json') {
       const data = fs.readFileSync(url).toString()
-      const formatter = new JSONFormatter(JSON.parse(data))
 
-      dom.result.innerHTML = ''
+      editor.setValue(data, 1)
 
-      dom.result.appendChild(formatter.render())
-
-      formatter.openAtDepth(10)
+      dom.output.innerHTML = ''
     }
   }
 }
 
-dom.button.onclick = getValue
-dom.upload.onclick = uploadFile
-dom.download.onclick = downloadFile
+dom.scrape.onclick = scrape
+dom.upload.onclick = upload
+dom.download.onclick = download
 dom.clear.onclick = utils.clearOutput
 dom.refresh.onclick = dom.noConnection.onclick = utils.refresh

@@ -18,32 +18,13 @@ html, body, #no-connection {
     cursor: pointer;
 }
 
-#spinner {
-    position: absolute;
-    right: 15px;
-    top: 15px;
-    display: none;
-}
-
 #content {
     display: flex;
     flex-flow: column;
     box-sizing: border-box;
     height: 100%;
     text-align: center;
-    padding: 25px;
-}
-
-#content > .row {
-    flex: 0 1 auto;
-}
-
-#content > .row:last-child {
-    flex: 1 1 auto;
-}
-
-#content .mdl-textfield {
-    width: 100%;
+    padding: 20px;
 }
 
 #content .mdl-button {
@@ -52,22 +33,40 @@ html, body, #no-connection {
     color: #666666;
 }
 
-#result-buttons {
-    position: fixed;
-    right: 40px;
-    top: 237px;
+#input {
+    margin-bottom: 10px;
+    min-height: 420px;
+    height: 420px;
 }
 
-#result {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    border: 1px solid lightgray;
-    margin-top: 20px;
+#buttons {
+    position: relative;
+}
+
+#spinner {
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 100%;
+    display: none;
+}
+
+#buttons, #input {
+    flex: 0 1 auto;
+}
+
+#output {
+    flex: 1 1 auto;
+    margin-top: 10px;
     padding: 20px;
-    font-size: 15px;
+    text-align: left;
+    font-size: 14px;
     color: #666666;
     overflow: auto;
+}
+
+#output, #input {
+    border: 1px solid lightgray;
 }
 
 /* json-formatter-js override */

@@ -12,36 +12,8 @@ With **Scraper** it is possible to load a json file with a specific structure ([
 
 ![Scraper app](https://raw.githubusercontent.com/cedoor/scraper/master/src/images/example.png)
 
-The input file for the result of the image above:
+Above there is the input configuration json, under the output of scraping.
 
-```javascript
-{
-    "header": {
-        "name": "Scraper repository"
-    },
-    "websites": [
-        {
-            "name": "Github",
-            "options": {},
-            "url": "https://github.com/cedoor/scraper",
-            "selectors": {
-                "description": ".repository-meta-content .text-gray-dark | trim",
-                "commits": ".stats-switcher-wrapper .numbers-summary > li:nth-child(1) .num | trim",
-                "branches": ".stats-switcher-wrapper .numbers-summary > li:nth-child(2) .num | trim",
-                "releases": ".stats-switcher-wrapper .numbers-summary > li:nth-child(3) .num | trim",
-                "contributors": ".stats-switcher-wrapper .numbers-summary > li:nth-child(4) .num | trim",
-                "license": ".stats-switcher-wrapper .numbers-summary > li:nth-child(5) a | trim",
-                "lastCommits": {
-                    "url": ".commits > a@href",
-                    "selectors": [
-                        ".commit-group > li .commit-title a"
-                    ]
-                }
-            }
-        }   
-    ]
-}
-```
 ## Usage
 
 **Scraper** get an input json file divided mainly into two parts:

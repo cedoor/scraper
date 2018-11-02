@@ -1,6 +1,6 @@
 {
 	"name": "scraper",
-	"version": "0.2.0",
+	"version": "0.2.2",
 	"description": "Simple desktop scraper app.",
 	"main": "index.js",
 	"scripts": {
@@ -22,15 +22,15 @@
 	},
 	"homepage": "https://github.com/cedoor/scraper#readme",
 	"dependencies": {
-		"electron-log": "2.2.14",
-		"electron-updater": "2.21.10",
-		"json-formatter-js": "2.2.0",
-		"x-ray": "2.3.2"
+		"electron-log": "2.2.17",
+		"electron-updater": "3.1.6",
+		"json-formatter-js": "2.2.1",
+		"x-ray": "2.3.3"
 	},
 	"devDependencies": {
-		"electron": "2.0.2",
-		"electron-builder": "20.13.3",
-		"electron-reload": "1.2.2",
-		"standard": "11.0.1"
+		"electron": "3.0.7",
+		"electron-builder": "20.31.2",
+		"electron-reload": "1.2.5",
+		"standard": "12.0.1"
 	}
 }

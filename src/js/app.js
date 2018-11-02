@@ -3,6 +3,7 @@ const fs = require('fs')
 const Xray = require('x-ray')
 const JSONFormatter = require('json-formatter-js').default
 
+// Create the x-ray instance.
 const xray = Xray({filters})
 
 // Internet connection check
@@ -46,60 +47,71 @@ const sanitizeSelectors = (selectors) => {
   return sanitized
 }
 
-const scrape = (url, scope = 'html', selectors, options) => {
-  return new Promise((resolve, reject) => {
-    const query = xray(url, scope, selectors)
+const scrape = () => {
+  const data = JSON.parse(editor.getValue())
 
-    if (options && options.pagination) {
-      query
-        .paginate(options.pagination)
-        .limit(options.limit)
-    }
+  const promises = []
 
-    query((err, res) => {
-      if (err) {
-        reject(err)
-      } else {
-        resolve(res)
-      }
-    })
-  })
-}
+  results = {
+    ...data.header,
+    websites: []
+  }
 
-const getValue = () => {
-  const url = dom.url.value
-  const selector = dom.selector.value
-
-  dom.result.innerHTML = ''
+  dom.output.innerHTML = ''
   utils.toggleLoading()
 
-  scrape(url, null, selector).then((res) => {
-    results = res
+  for (let website of data.websites) {
+    const sanitized = sanitizeSelectors(website.selectors)
 
-    dom.result.innerHTML = res
-    utils.toggleLoading()
-  }).catch((err) => {
-    dom.result.innerHTML = 'Error: ' + err
-    utils.toggleLoading()
-  })
-}
+    let promise = utils.xray(website.url, website.scope, website.selectors, website.options).then((res) => {
+      delete website.scope
+      delete website.selectors
+      delete website.options
 
-const downloadFile = () => {
-  dialog.showSaveDialog({
-    title: 'Save file',
-    defaultPath: 'data.json'
-  }, (path) => {
-    if (typeof path === 'string') {
-      if (typeof results === 'string') {
-        results = {results}
+      if (sanitized && Array.isArray(res)) {
+        res.shift()
       }
 
-      fs.writeFileSync(path, JSON.stringify(results, null, 4))
-    }
+      const result = website
+      result.results = res
+
+      results.websites.push(result)
+    }).catch((err) => {
+      console.error(err)
+    })
+
+    promises.push(promise)
+  }
+
+  Promise.all(promises).then(() => {
+    const formatter = new JSONFormatter(results)
+
+    dom.output.appendChild(formatter.render())
+
+    formatter.openAtDepth(10)
+
+    utils.toggleLoading()
   })
 }
 
-const uploadFile = () => {
+const download = () => {
+  if (results) {
+    dialog.showSaveDialog({
+      title: 'Save file',
+      defaultPath: 'data.json'
+    }, (path) => {
+      if (typeof path === 'string') {
+        if (typeof results === 'string') {
+          results = {results}
+        }
+
+        fs.writeFileSync(path, JSON.stringify(results, null, 4))
+      }
+    })
+  }
+}
+
+const upload = () => {
   dialog.showOpenDialog({
     title: 'Open file',
     properties: ['openFile'],
@@ -112,49 +124,9 @@ const uploadFile = () => {
     }]
   }, (files) => {
     if (files) {
-      const input = JSON.parse(fs.readFileSync(files[0]).toString())
-      const promises = []
+      const input = fs.readFileSync(files[0]).toString()
 
-      results = {
-        ...input.header,
-        websites: []
-      }
-
-      dom.result.innerHTML = ''
-      utils.toggleLoading()
-
-      for (let website of input.websites) {
-        const sanitized = sanitizeSelectors(website.selectors)
-
-        let promise = scrape(website.url, website.scope, website.selectors, website.options).then((res) => {
-          delete website.scope
-          delete website.selectors
-          delete website.options
-
-          if (sanitized && Array.isArray(res)) {
-            res.shift()
-          }
-
-          const result = website
-          result.results = res
-
-          results.websites.push(result)
-        }).catch((err) => {
-          console.error(err)
-        })
-
-        promises.push(promise)
-      }
-
-      Promise.all(promises).then(() => {
-        const formatter = new JSONFormatter(results)
-
-        dom.result.appendChild(formatter.render())
-
-        formatter.openAtDepth(10)
-
-        utils.toggleLoading()
-      })
+      editor.setValue(input, 1)
     }
   })
 }

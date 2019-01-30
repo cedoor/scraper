@@ -1,6 +1,6 @@
 {
 	"name": "scraper",
-	"version": "0.2.2",
+	"version": "0.2.3",
 	"description": "Simple desktop scraper app.",
 	"main": "index.js",
 	"scripts": {
